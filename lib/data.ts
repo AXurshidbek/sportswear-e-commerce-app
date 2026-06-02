@@ -25,7 +25,7 @@ export const products: Product[] = [
     price: 129.99,
     originalPrice: 159.99,
     image: "https://shop.realmadrid.com/cdn/shop/files/image_5_6c1e66e4-f72a-49a8-819c-1c13ef555e1b.webp?v=1767820849",
-    images: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA1DNGRXJOt-7k_JnxJOqGWMlcwX7N2vvYwg&s", "https://preview.redd.it/jude-bellingham-turns-22-today-97-games-played-with-real-v0-yazw9utt0r9f1.png?width=1080&crop=smart&auto=webp&s=f8365333c21e50f628e4d155f8fdf5d1a49de3e5", "https://i.pinimg.com/736x/11/81/fb/1181fb239378d259071b0756b54d8b18.jpg"],
+    images: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA1DNGRXJOt-7k_JnxJOqGWMlcwX7N2vvYwg&s", "https://shop.realmadrid.com/cdn/shop/files/image_4_d76cf7a1-fdf5-4404-9c43-91b59aebed87.webp?v=1767820848&width=2000", "https://i.pinimg.com/736x/11/81/fb/1181fb239378d259071b0756b54d8b18.jpg"],
     category: "men",
     subcategory: "shoes",
     brand: "SPORTX",
