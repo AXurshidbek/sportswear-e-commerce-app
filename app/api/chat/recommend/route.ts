@@ -72,7 +72,6 @@ Be friendly and helpful.`;
       });
     } catch (aiError: any) {
       // Use fallback recommendation if AI service fails
-      console.log('AI Gateway error in recommendations, using fallback:', aiError.message);
       const fallbackResponse = generateFallbackRecommendation(budget, activityType, filteredProducts);
       
       return Response.json({

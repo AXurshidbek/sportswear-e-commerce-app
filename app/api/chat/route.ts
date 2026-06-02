@@ -68,7 +68,6 @@ export async function POST(request: Request) {
       });
     } catch (aiError: any) {
       // If AI Gateway fails, use fallback responses
-      console.log('AI Gateway error, using fallback:', aiError.message);
       const lastUserMessage = formattedMessages[formattedMessages.length - 1]?.content || '';
       const fallbackResponse = getFallbackResponse(lastUserMessage);
       
