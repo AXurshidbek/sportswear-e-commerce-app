@@ -31,37 +31,37 @@ export default function RecommendationForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-blue-50 p-4 rounded-lg space-y-4">
+    <form onSubmit={handleSubmit} className="bg-secondary p-4 rounded-xl space-y-4 border border-border">
       <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
+        <label className="block text-sm font-semibold text-foreground mb-3">
           What&apos;s your budget?
         </label>
         <div className="space-y-2">
           {BUDGETS.map((b) => (
-            <label key={b} className="flex items-center gap-2 cursor-pointer">
+            <label key={b} className="flex items-center gap-3 cursor-pointer group">
               <input
                 type="radio"
                 name="budget"
                 value={b}
                 checked={localBudget === b}
                 onChange={(e) => setLocalBudget(e.target.value)}
-                className="accent-primary"
+                className="accent-accent w-4 h-4"
               />
-              <span className="text-sm text-gray-700">{b}</span>
+              <span className="text-sm text-foreground group-hover:text-accent transition-colors">{b}</span>
             </label>
           ))}
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
+      <div className="border-t border-border pt-4">
+        <label className="block text-sm font-semibold text-foreground mb-3">
           What activity?
         </label>
         <div className="space-y-2">
           {ACTIVITIES.map((activity) => (
             <label
               key={activity}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-3 cursor-pointer group"
             >
               <input
                 type="radio"
@@ -69,9 +69,9 @@ export default function RecommendationForm() {
                 value={activity}
                 checked={localActivity === activity}
                 onChange={(e) => setLocalActivity(e.target.value)}
-                className="accent-primary"
+                className="accent-accent w-4 h-4"
               />
-              <span className="text-sm text-gray-700">{activity}</span>
+              <span className="text-sm text-foreground group-hover:text-accent transition-colors">{activity}</span>
             </label>
           ))}
         </div>
@@ -80,7 +80,7 @@ export default function RecommendationForm() {
       <button
         type="submit"
         disabled={!localBudget || !localActivity}
-        className="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors font-medium"
+        className="w-full bg-accent text-accent-foreground py-2 rounded-lg hover:bg-accent/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-semibold"
       >
         Get Recommendations
       </button>

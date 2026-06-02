@@ -19,7 +19,7 @@ export default function ChatMessages({
   }, [messages]);
 
   return (
-    <div className="p-4 space-y-4 flex flex-col">
+    <div className="p-4 space-y-4 flex flex-col overflow-y-auto">
       {messages.map((message) => (
         <div
           key={message.id}
@@ -28,14 +28,16 @@ export default function ChatMessages({
           }`}
         >
           <div
-            className={`max-w-xs px-4 py-2 rounded-lg ${
+            className={`max-w-xs px-4 py-3 rounded-lg text-sm whitespace-pre-wrap ${
               message.role === 'user'
-                ? 'bg-primary text-white rounded-br-none'
-                : 'bg-gray-100 text-gray-800 rounded-bl-none'
+                ? 'bg-accent text-accent-foreground rounded-br-none'
+                : 'bg-secondary text-secondary-foreground rounded-bl-none'
             }`}
           >
-            <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-            <span className="text-xs opacity-70 mt-1 block">
+            {message.content}
+            <span className={`text-xs opacity-60 mt-1 block ${
+              message.role === 'user' ? 'text-accent-foreground' : 'text-secondary-foreground'
+            }`}>
               {message.timestamp.toLocaleTimeString([], {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -51,11 +53,11 @@ export default function ChatMessages({
 
       {isLoading && (
         <div className="flex justify-start">
-          <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg rounded-bl-none">
+          <div className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg rounded-bl-none">
             <div className="flex space-x-2">
-              <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" />
-              <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-100" />
-              <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-200" />
+              <div className="w-2 h-2 bg-muted rounded-full animate-bounce" />
+              <div className="w-2 h-2 bg-muted rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+              <div className="w-2 h-2 bg-muted rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
             </div>
           </div>
         </div>

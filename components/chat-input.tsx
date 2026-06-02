@@ -27,12 +27,12 @@ export default function ChatInput({
   };
 
   return (
-    <div className="border-t border-gray-200 p-4 space-y-3 bg-gray-50">
+    <div className="border-t border-border p-4 space-y-3 bg-secondary">
       {/* Quick Actions */}
       <div className="flex gap-2">
         <button
           onClick={handleRecommendClick}
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded text-sm font-medium hover:bg-gray-50 transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-accent text-accent-foreground text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors"
         >
           <Zap className="w-4 h-4" />
           Recommend
@@ -47,21 +47,17 @@ export default function ChatInput({
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask me anything..."
           disabled={isLoading}
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100"
+          className="flex-1 px-4 py-2 bg-input border border-border text-foreground rounded-lg placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
-          className="bg-primary text-white p-2 rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
+          className="bg-accent text-accent-foreground p-2 rounded-lg hover:bg-accent/90 disabled:opacity-50 transition-colors"
           aria-label="Send message"
         >
           <Send className="w-5 h-5" />
         </button>
       </form>
-
-      <p className="text-xs text-gray-500 text-center">
-        Powered by Claude AI
-      </p>
     </div>
   );
 }
