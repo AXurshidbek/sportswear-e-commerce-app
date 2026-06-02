@@ -12,7 +12,8 @@ function generateFallbackRecommendation(budget: string, activityType: string, fi
   let response = `Great! Based on your budget of ${budget} and ${activityType} activity, here are my top recommendations:\n\n`;
   
   recommendations.forEach((product, index) => {
-    response += `${index + 1}. **${product.name}** (${product.price})\n`;
+    const priceDisplay = typeof product.price === 'number' ? `$${product.price.toFixed(2)}` : product.price;
+    response += `${index + 1}. **${product.name}** (${priceDisplay})\n`;
     response += `   Category: ${product.category}\n`;
     response += `   Rating: ${product.rating || 'N/A'}\n\n`;
   });
@@ -27,7 +28,8 @@ export async function POST(request: Request) {
 
     // Filter products based on budget and activity type
     const filteredProducts = products.filter((product) => {
-      const priceNum = parseFloat(product.price.replace('$', ''));
+      // Handle price as number (from data) or string (from user input)
+      const priceNum = typeof product.price === 'string' ? parseFloat(product.price.replace('$', '')) : product.price;
       const budgetNum = parseFloat(budget.replace('$', ''));
       
       // Match activity type with categories
