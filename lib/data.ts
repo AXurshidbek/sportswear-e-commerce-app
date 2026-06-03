@@ -137,7 +137,7 @@ export const products: Product[] = [
     price: 65.0,
     originalPrice: 75.0,
     image: "https://i5.walmartimages.com/seo/Rgdypko-Kid-s-Running-Sneaker-School-Athletic-Walking-Shoes-For-Children-Kids-Tennis-Lightweight-Kid-School-Shoes_c42c9526-6cc5-42a8-bd37-85a4ec71cdd6.aac806db324261030e69ee386b91b600.jpeg?odnHeight=573&odnWidth=573&odnBg=FFFFFF",
-    images: [", "/placeholder.svg?height=600&width=600"],
+    images: ["https://i5.walmartimages.com/asr/57c83105-b59a-4f5d-81f8-77ce474ef26e.491c75baddecba85adaba6ae81c96c58.jpeg?odnHeight=573&odnWidth=573&odnBg=FFFFFF", "https://i5.walmartimages.com/asr/bf83a58e-5d2e-4630-94bb-86363e51356c.f08c9c47ae4301dc0e8619d3f0b45b76.jpeg?odnHeight=573&odnWidth=573&odnBg=FFFFFF"],
     category: "kids",
     subcategory: "shoes",
     brand: "SPORTX Junior",
