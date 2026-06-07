@@ -269,7 +269,7 @@ export function Header() {
         {/* Actions */}
         <div className="flex items-center gap-1 md:gap-2">
           <a
-            href="https://play.google.com/store/apps/details?id=com.sportx.app"
+            href="https://www.upload-apk.com/N6C7JVfdbvx1rUR"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden lg:block"
