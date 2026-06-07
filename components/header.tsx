@@ -269,7 +269,7 @@ export function Header() {
         {/* Actions */}
         <div className="flex items-center gap-1 md:gap-2">
           <a
-            href="https://www.upload-apk.com/N6C7JVfdbvx1rUR"
+            href="https://drive.google.com/file/d/1LcoKPkqvDYdYIKFP9HjxLn-I0QkFUenI/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden lg:block"
