@@ -4,7 +4,6 @@ import { HeroBanner } from "@/components/hero-banner"
 import { CategoryGrid } from "@/components/category-grid"
 import { FeaturedProducts } from "@/components/featured-products"
 import { NewArrivals } from "@/components/new-arrivals"
-import ChatWidget from "@/components/chat-widget"
 
 export default function HomePage() {
   return (
@@ -17,7 +16,6 @@ export default function HomePage() {
         <NewArrivals />
       </main>
       <BottomNav />
-      <ChatWidget />
     </div>
   )
 }
