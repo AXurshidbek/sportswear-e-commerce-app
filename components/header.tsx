@@ -4,7 +4,7 @@ import type React from "react"
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Search, ShoppingBag, Heart, User, Menu, X, Clock, TrendingUp, ChevronDown, Store } from "lucide-react"
+import { Search, ShoppingBag, Heart, User, Menu, X, Clock, TrendingUp, ChevronDown, Store, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/contexts/cart-context"
 import { useSearch } from "@/contexts/search-context"
@@ -268,6 +268,18 @@ export function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-1 md:gap-2">
+          <a
+            href="https://drive.google.com/file/d/1LcoKPkqvDYdYIKFP9HjxLn-I0QkFUenI/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden lg:block"
+          >
+            <Button variant="outline" size="sm" className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground">
+              <Download className="h-4 w-4" />
+              <span className="text-xs font-medium">Download App</span>
+            </Button>
+          </a>
+
           <Link href="/wishlist" className="hidden md:block">
             <Button variant="ghost" size="icon">
               <Heart className="h-5 w-5" />
