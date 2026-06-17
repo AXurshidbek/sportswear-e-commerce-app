@@ -1,86 +1,74 @@
-import { generateText } from 'ai';
+import { generateSportxResponse } from '@/lib/ai'
+import { parseLanguage, type Language } from '@/lib/translate'
 
-const modelId = 'anthropic/claude-3-5-sonnet';
+const fallbackResponses: Record<Language, Record<string, string>> = {
+  uz: {
+    'return policy':
+      "Biz barcha mahsulotlar uchun 30 kunlik qaytarish siyosatini taklif qilamiz. Mahsulot kiyilmagan va yorliqlari saqlangan bo'lishi kerak.",
+    shipping:
+      '1000000 dan ortiq buyurtmalarda bepul yetkazib berish! Standart yetkazib berish 35 000 so\'m, 5-7 ish kuni.',
+    sizing:
+      'Har bir mahsulot uchun batafsil o\'lcham jadvali mavjud. O\'lcham oralig\'ida qolsangiz, kiyimni kattaroq tanlashni tavsiya qilamiz.',
+    default:
+      "SPORTX yordamchisiman! Yetkazib berish, qaytarish, o'lcham va mahsulotlar haqida savollaringizga javob bera olaman.",
+  },
+  en: {
+    'return policy':
+      'We offer a 30-day return policy on all items. Items must be unworn with original tags attached.',
+    shipping:
+      'Free shipping on orders over 1,000,000 UZS! Standard delivery 35,000 UZS, 5-7 business days.',
+    sizing:
+      'We provide detailed size charts for each product. If between sizes, we recommend sizing up for athletic wear.',
+    default:
+      "I'm the SPORTX assistant! I can help with shipping, returns, sizing, and product questions.",
+  },
+  ru: {
+    'return policy':
+      'Мы предлагаем 30-дневную политику возврата. Товар должен быть не ношеным с оригинальными бирками.',
+    shipping:
+      'Бесплатная доставка при заказе от 1 000 000 сум! Стандартная доставка 35 000 сум, 5-7 рабочих дней.',
+    sizing:
+      'Для каждого товара есть таблица размеров. Если между размерами — рекомендуем брать больше.',
+    default:
+      'Я помощник SPORTX! Могу ответить на вопросы о доставке, возврате, размерах и товарах.',
+  },
+}
 
-const systemPrompt = `You are a helpful customer service AI assistant for a sportswear e-commerce store. You help customers with:
+function getFallbackResponse(language: Language, userMessage: string): string {
+  const lowerMessage = userMessage.toLowerCase()
+  const responses = fallbackResponses[language]
 
-1. **Frequently Asked Questions**: Answer questions about shipping, returns, sizing, materials, care instructions, and general product information.
-2. **Product Recommendations**: When users provide their budget and activity type, recommend suitable products from our catalog.
-3. **Smart Search**: Help customers find products using natural language.
-
-Be friendly, professional, and concise. Always maintain context of the conversation.
-
-When answering FAQs:
-- Be clear and helpful
-- Provide specific information when available
-- Suggest related products if relevant
-
-When recommending products:
-- Ask for budget and activity type if not provided
-- Consider quality and price balance
-- Recommend 2-3 products
-- Explain why each product is suitable
-
-Available product categories: Running Shoes, Training T-shirts, Athletic Leggings, Training Shorts, Sports Bras, Gym Gloves`;
-
-// Fallback responses for common questions when API is not available
-const fallbackResponses: { [key: string]: string } = {
-  'return policy': 'We offer a 30-day return policy on all items. Items must be unworn and with original tags attached. Simply contact our customer service with your order number to initiate a return. Refunds are processed within 5-7 business days after we receive the item.',
-  'shipping': 'We offer free shipping on orders over $100! Standard shipping typically takes 5-7 business days. Express shipping (2-3 days) is available for $15. All orders are tracked and you\'ll receive an email with your tracking number.',
-  'sizing': 'We provide detailed size charts for each product. Measurements are in inches for US sizes. If you\'re between sizes, we recommend sizing up for athletic wear to allow for movement. Contact our customer service if you need personalized sizing assistance!',
-  'materials': 'Our sportswear is made from high-quality, breathable fabrics including polyester, nylon, and spandex blends. All materials are moisture-wicking and designed for optimal performance during various activities.',
-  'care': 'Most items are machine washable. We recommend washing in cold water with similar colors and air drying to maintain quality. Avoid bleach and fabric softeners. For detailed care instructions, check the label inside each item.',
-};
-
-function getFallbackResponse(userMessage: string): string {
-  const lowerMessage = userMessage.toLowerCase();
-  
-  for (const [keyword, response] of Object.entries(fallbackResponses)) {
-    if (lowerMessage.includes(keyword)) {
-      return response;
+  for (const [keyword, response] of Object.entries(responses)) {
+    if (keyword !== 'default' && lowerMessage.includes(keyword)) {
+      return response
     }
   }
-  
-  return 'Thanks for your question! I\'m a helpful assistant for SPORTX. I can answer questions about our return policy, shipping, sizing, materials, and product care. What would you like to know?';
+  return responses.default
 }
 
 export async function POST(request: Request) {
   try {
-    const { messages } = await request.json();
+    const { messages, language: reqLanguage } = await request.json()
+    const language = parseLanguage(reqLanguage)
 
-    // Convert messages to the format expected by generateText
-    const formattedMessages = messages.map((msg: any) => ({
-      role: msg.role,
+    const formattedMessages = messages.map((msg: { role: string; content: string }) => ({
+      role: msg.role as 'user' | 'assistant',
       content: msg.content,
-    }));
+    }))
 
     try {
-      const response = await generateText({
-        model: modelId,
-        system: systemPrompt,
-        messages: formattedMessages,
-        temperature: 0.7,
-        maxTokens: 500,
-      });
-
+      const content = await generateSportxResponse(language, formattedMessages)
+      return Response.json({ content })
+    } catch (aiError) {
+      console.error('Chat AI error:', aiError)
+      const lastUserMessage = formattedMessages[formattedMessages.length - 1]?.content || ''
       return Response.json({
-        content: response.text,
-      });
-    } catch (aiError: any) {
-      // If AI Gateway fails, use fallback responses
-      const lastUserMessage = formattedMessages[formattedMessages.length - 1]?.content || '';
-      const fallbackResponse = getFallbackResponse(lastUserMessage);
-      
-      return Response.json({
-        content: fallbackResponse,
+        content: getFallbackResponse(language, lastUserMessage),
         isFallback: true,
-      });
+      })
     }
   } catch (error) {
-    console.error('Chat API error:', error);
-    return Response.json(
-      { error: 'Failed to process chat message' },
-      { status: 500 }
-    );
+    console.error('Chat API error:', error)
+    return Response.json({ error: 'Failed to process chat message' }, { status: 500 })
   }
 }

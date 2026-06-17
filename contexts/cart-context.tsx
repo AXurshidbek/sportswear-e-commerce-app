@@ -1,6 +1,12 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import {
+  createContext,
+  useContext,
+  useCallback,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react"
 
 export interface CartItem {
   id: string
@@ -22,55 +28,110 @@ interface CartContextType {
   total: number
 }
 
+const CART_KEY = "cart"
+const EMPTY_CART: CartItem[] = []
+
+type Listener = () => void
+let listeners: Listener[] = []
+
+let snapshotCache: CartItem[] = EMPTY_CART
+let snapshotRaw: string | null = "__init__"
+
+function subscribe(listener: Listener) {
+  listeners = [...listeners, listener]
+  return () => {
+    listeners = listeners.filter((l) => l !== listener)
+  }
+}
+
+function notify() {
+  listeners.forEach((listener) => listener())
+}
+
+function getCartSnapshot(): CartItem[] {
+  if (typeof window === "undefined") return EMPTY_CART
+
+  const raw = localStorage.getItem(CART_KEY)
+  if (raw === snapshotRaw) return snapshotCache
+
+  snapshotRaw = raw
+  if (!raw) {
+    snapshotCache = EMPTY_CART
+    return snapshotCache
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as CartItem[]
+    snapshotCache = Array.isArray(parsed) ? parsed : EMPTY_CART
+  } catch {
+    snapshotCache = EMPTY_CART
+  }
+
+  return snapshotCache
+}
+
+function getServerCartSnapshot(): CartItem[] {
+  return EMPTY_CART
+}
+
+function writeCartToStorage(items: CartItem[]) {
+  const raw = JSON.stringify(items)
+  snapshotCache = items.length === 0 ? EMPTY_CART : items
+  snapshotRaw = raw
+  localStorage.setItem(CART_KEY, raw)
+  notify()
+}
+
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([])
+  const items = useSyncExternalStore(subscribe, getCartSnapshot, getServerCartSnapshot)
 
-  useEffect(() => {
-    const stored = localStorage.getItem("cart")
-    if (stored) {
-      setItems(JSON.parse(stored))
-    }
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(items))
-  }, [items])
-
-  const addItem = (item: CartItem) => {
-    setItems((prev) => {
-      const existing = prev.find((i) => i.id === item.id && i.size === item.size && i.color === item.color)
-      if (existing) {
-        return prev.map((i) =>
+  const addItem = useCallback((item: CartItem) => {
+    const prev = getCartSnapshot()
+    const existing = prev.find(
+      (i) => i.id === item.id && i.size === item.size && i.color === item.color,
+    )
+    const next = existing
+      ? prev.map((i) =>
           i.id === item.id && i.size === item.size && i.color === item.color
             ? { ...i, quantity: i.quantity + item.quantity }
             : i,
         )
-      }
-      return [...prev, item]
-    })
-  }
+      : [...prev, item]
+    writeCartToStorage(next)
+  }, [])
 
-  const removeItem = (id: string, size: string, color: string) => {
-    setItems((prev) => prev.filter((i) => !(i.id === id && i.size === size && i.color === color)))
-  }
+  const removeItem = useCallback((id: string, size: string, color: string) => {
+    const next = getCartSnapshot().filter(
+      (i) => !(i.id === id && i.size === size && i.color === color),
+    )
+    writeCartToStorage(next)
+  }, [])
 
-  const updateQuantity = (id: string, size: string, color: string, quantity: number) => {
+  const updateQuantity = useCallback((id: string, size: string, color: string, quantity: number) => {
     if (quantity <= 0) {
-      removeItem(id, size, color)
+      const next = getCartSnapshot().filter(
+        (i) => !(i.id === id && i.size === size && i.color === color),
+      )
+      writeCartToStorage(next)
       return
     }
-    setItems((prev) => prev.map((i) => (i.id === id && i.size === size && i.color === color ? { ...i, quantity } : i)))
-  }
+    const next = getCartSnapshot().map((i) =>
+      i.id === id && i.size === size && i.color === color ? { ...i, quantity } : i,
+    )
+    writeCartToStorage(next)
+  }, [])
 
-  const clearCart = () => setItems([])
+  const clearCart = useCallback(() => writeCartToStorage([]), [])
 
   const itemCount = items.reduce((acc, item) => acc + item.quantity, 0)
   const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0)
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, itemCount, total }}>
+    <CartContext.Provider
+      value={{ items, addItem, removeItem, updateQuantity, clearCart, itemCount, total }}
+    >
       {children}
     </CartContext.Provider>
   )

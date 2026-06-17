@@ -16,7 +16,7 @@ export function TranslationDemo() {
         {t('common.current_currency')}: <span className="font-bold text-foreground">{currency}</span>
       </p>
       <p className="text-xs text-muted-foreground mt-3 italic">
-        {t('common.example_price')}: {formatPrice(100)}
+        {t('common.example_price')}: {formatPrice(580_000)}
       </p>
     </div>
   )

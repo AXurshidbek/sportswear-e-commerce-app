@@ -6,11 +6,10 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Search, ShoppingBag, Heart, User, Menu, X, Clock, TrendingUp, ChevronDown, Store, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useCart } from "@/contexts/cart-context"
+import { CartBadge } from "@/components/cart-badge"
 import { useSearch } from "@/contexts/search-context"
 import { useAuth } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
-import { useCurrency } from "@/contexts/currency-context"
 import LanguageCurrencySelector from "@/components/language-currency-selector"
 import { useState, useRef, useEffect } from "react"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
@@ -23,57 +22,57 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 
-const categories = [
-  {
-    name: "Erkaklar",
-    href: "/products?category=men",
-    subcategories: [
-      { name: "Oyoq kiyimlar", href: "/products?category=men&subcategory=shoes" },
-      { name: "Ust kiyimlar", href: "/products?category=men&subcategory=tops" },
-      { name: "Ost kiyimlar", href: "/products?category=men&subcategory=bottoms" },
-      { name: "Futbolkalar", href: "/products?category=men&subcategory=jackets" },
-    ],
-  },
-  {
-    name: "Ayollar",
-    href: "/products?category=women",
-    subcategories: [
-      { name: "Oyoq kiyimlar", href: "/products?category=women&subcategory=shoes" },
-      { name: "Ust kiyimlar", href: "/products?category=women&subcategory=tops" },
-      { name: "Ost kiyimlar", href: "/products?category=women&subcategory=bottoms" },
-      { name: "Qo'shimcha", href: "/products?category=women&subcategory=sports-bras" },
-    ],
-  },
-  {
-    name: "Bolalar",
-    href: "/products?category=kids",
-    subcategories: [
-      { name: "Oyoq kiymlar", href: "/products?category=kids&subcategory=shoes" },
-      { name: "Kiyimlar", href: "/products?category=kids&subcategory=clothing" },
-    ],
-  },
-  {
-    name: "Aksesuarlar",
-    href: "/products?category=accessories",
-    subcategories: [
-      { name: "Sumkalar", href: "/products?category=accessories&subcategory=bags" },
-      { name: "Paypoqlar", href: "/products?category=accessories&subcategory=socks" },
-      { name: "Qo'lqoplar", href: "/products?category=accessories&subcategory=gloves" },
-      { name: "Bosh kiyimlar", href: "/products?category=accessories&subcategory=hats" },
-    ],
-  },
-]
-
-const trendingSearches = ["Running Shoes", "Yoga Pants", "Training Shorts", "Sports Bra"]
+const trendingSearchKeys = ["Running Shoes", "Yoga Pants", "Training Shorts", "Sports Bra"]
 
 export function Header() {
   const router = useRouter()
-  const { itemCount } = useCart()
   const { recentSearches, addRecentSearch, removeRecentSearch, clearRecentSearches } = useSearch()
   const { user } = useAuth()
+  const { t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
   const [isSearchFocused, setIsSearchFocused] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
+
+  const categories = [
+    {
+      name: t("nav.men"),
+      href: "/products?category=men",
+      subcategories: [
+        { name: t("nav.menShoes"), href: "/products?category=men&subcategory=shoes" },
+        { name: t("nav.menTops"), href: "/products?category=men&subcategory=tops" },
+        { name: t("nav.menBottoms"), href: "/products?category=men&subcategory=bottoms" },
+        { name: t("nav.menJackets"), href: "/products?category=men&subcategory=jackets" },
+      ],
+    },
+    {
+      name: t("nav.women"),
+      href: "/products?category=women",
+      subcategories: [
+        { name: t("nav.womenShoes"), href: "/products?category=women&subcategory=shoes" },
+        { name: t("nav.womenTops"), href: "/products?category=women&subcategory=tops" },
+        { name: t("nav.womenBottoms"), href: "/products?category=women&subcategory=bottoms" },
+        { name: t("nav.womenSportsBras"), href: "/products?category=women&subcategory=sports-bras" },
+      ],
+    },
+    {
+      name: t("nav.kids"),
+      href: "/products?category=kids",
+      subcategories: [
+        { name: t("nav.kidsShoes"), href: "/products?category=kids&subcategory=shoes" },
+        { name: t("nav.kidsClothing"), href: "/products?category=kids&subcategory=clothing" },
+      ],
+    },
+    {
+      name: t("nav.accessories"),
+      href: "/products?category=accessories",
+      subcategories: [
+        { name: t("nav.accBags"), href: "/products?category=accessories&subcategory=bags" },
+        { name: t("nav.accSocks"), href: "/products?category=accessories&subcategory=socks" },
+        { name: t("nav.accGloves"), href: "/products?category=accessories&subcategory=gloves" },
+        { name: t("nav.accHats"), href: "/products?category=accessories&subcategory=hats" },
+      ],
+    },
+  ]
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -111,7 +110,7 @@ export function Header() {
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Qidirish..."
+                placeholder={t("header.search")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
@@ -128,13 +127,13 @@ export function Header() {
                     <div className="mb-2 flex items-center justify-between">
                       <span className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
                         <Clock className="h-3 w-3" />
-                        Recent Searches
+                        {t("header.recentSearches")}
                       </span>
                       <button
                         onClick={clearRecentSearches}
                         className="text-xs text-muted-foreground hover:text-foreground"
                       >
-                        Clear
+                        {t("header.clear")}
                       </button>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -162,10 +161,10 @@ export function Header() {
                 <div>
                   <span className="mb-2 flex items-center gap-2 text-xs font-medium text-muted-foreground">
                     <TrendingUp className="h-3 w-3" />
-                    Trending
+                    {t("header.trending")}
                   </span>
                   <div className="flex flex-wrap gap-2">
-                    {trendingSearches.map((search) => (
+                    {trendingSearchKeys.map((search) => (
                       <button
                         key={search}
                         onClick={() => handleQuickSearch(search)}
@@ -182,19 +181,19 @@ export function Header() {
         </div>
       </div>
 
-      <div className="container mx-auto flex h-14 items-center justify-between px-4 md:h-16">
+      <div className="container mx-auto flex h-14 items-center gap-2 px-4 md:h-16 md:gap-4">
         {/* Mobile Menu */}
         <Sheet>
           <SheetTrigger asChild className="md:hidden">
             <Button variant="ghost" size="icon" className="shrink-0">
               <Menu className="h-5 w-5" />
-              <span className="sr-only">Menu</span>
+              <span className="sr-only">{t("header.menu")}</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-80 bg-background p-0">
-            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+            <SheetTitle className="sr-only">{t("header.menu")}</SheetTitle>
             <div className="flex h-14 items-center border-b border-border px-4">
-              <span className="text-lg font-bold">Categories</span>
+              <span className="text-lg font-bold">{t("nav.categories")}</span>
             </div>
             <nav className="p-4">
               {categories.map((category) => (
@@ -224,7 +223,7 @@ export function Header() {
                   className="flex items-center gap-2 text-lg font-semibold text-foreground transition-colors hover:text-accent"
                 >
                   <Store className="h-5 w-5" />
-                  All Stores
+                  {t("header.allStores")}
                 </Link>
               </div>
             </nav>
@@ -232,11 +231,11 @@ export function Header() {
         </Sheet>
 
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold tracking-tight md:text-2xl">
+        <Link href="/" className="shrink-0 text-lg font-bold tracking-tight md:text-2xl">
           SPORTX
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 md:flex lg:gap-6">
           {categories.map((category) => (
             <DropdownMenu key={category.name}>
               <DropdownMenuTrigger asChild>
@@ -248,7 +247,7 @@ export function Header() {
               <DropdownMenuContent align="start" className="w-48">
                 <DropdownMenuItem asChild>
                   <Link href={category.href} className="font-medium">
-                    All {category.name}
+                    {t("header.all")} {category.name}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -265,15 +264,12 @@ export function Header() {
             className="flex items-center gap-1 text-sm font-medium text-foreground transition-colors hover:text-muted-foreground"
           >
             <Store className="h-4 w-4" />
-            Stores
+            {t("nav.stores")}
           </Link>
         </nav>
 
-        {/* Language & Currency Selector */}
-        <LanguageCurrencySelector />
-
-        {/* Actions */}
-        <div className="flex items-center gap-1 md:gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-1 md:gap-2">
+          <LanguageCurrencySelector />
           <a
             href="https://drive.google.com/file/d/1LcoKPkqvDYdYIKFP9HjxLn-I0QkFUenI/view?usp=sharing"
             target="_blank"
@@ -282,26 +278,22 @@ export function Header() {
           >
             <Button variant="outline" size="sm" className="flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground">
               <Download className="h-4 w-4" />
-              <span className="text-xs font-medium">Download App</span>
+              <span className="text-xs font-medium">{t("header.downloadApp")}</span>
             </Button>
           </a>
 
           <Link href="/wishlist" className="hidden md:block">
             <Button variant="ghost" size="icon">
               <Heart className="h-5 w-5" />
-              <span className="sr-only">Wishlist</span>
+              <span className="sr-only">{t("header.wishlist")}</span>
             </Button>
           </Link>
 
           <Link href="/cart" className="hidden md:block">
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingBag className="h-5 w-5" />
-              {itemCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">
-                  {itemCount > 9 ? "9+" : itemCount}
-                </span>
-              )}
-              <span className="sr-only">Cart</span>
+              <CartBadge className="absolute -right-1 -top-1 h-5 w-5 text-xs" />
+              <span className="sr-only">{t("header.cart")}</span>
             </Button>
           </Link>
 
@@ -309,7 +301,7 @@ export function Header() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
                 <User className="h-5 w-5" />
-                <span className="sr-only">Profile</span>
+                <span className="sr-only">{t("header.profile")}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -321,17 +313,17 @@ export function Header() {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/profile">My Profile</Link>
+                    <Link href="/profile">{t("header.myProfile")}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/orders">My Orders</Link>
+                    <Link href="/orders">{t("header.myOrders")}</Link>
                   </DropdownMenuItem>
                   {user.role === "vendor" && (
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
                         <Link href="/vendor" className="text-accent">
-                          Vendor Dashboard
+                          {t("header.vendorDashboard")}
                         </Link>
                       </DropdownMenuItem>
                     </>
@@ -341,7 +333,7 @@ export function Header() {
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
                         <Link href="/admin" className="text-accent">
-                          Admin Panel
+                          {t("header.adminPanel")}
                         </Link>
                       </DropdownMenuItem>
                     </>
@@ -350,15 +342,15 @@ export function Header() {
               ) : (
                 <>
                   <DropdownMenuItem asChild>
-                    <Link href="/login">Sign In</Link>
+                    <Link href="/login">{t("header.signIn")}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/register">Create Account</Link>
+                    <Link href="/register">{t("header.createAccount")}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href="/vendor/register" className="text-accent">
-                      Become a Seller
+                      {t("header.becomeSeller")}
                     </Link>
                   </DropdownMenuItem>
                 </>

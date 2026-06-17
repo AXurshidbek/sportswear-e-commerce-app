@@ -1,92 +1,54 @@
-import { generateText } from 'ai';
-import { products } from '@/lib/data';
-
-const modelId = 'anthropic/claude-3-5-sonnet';
-
-function generateFallbackRecommendation(budget: string, activityType: string, filteredProducts: any[]): string {
-  if (filteredProducts.length === 0) {
-    return `I couldn't find products matching your criteria (${activityType} activity with ${budget} budget). Please try adjusting your preferences!`;
-  }
-
-  const recommendations = filteredProducts.slice(0, 3);
-  let response = `Great! Based on your budget of ${budget} and ${activityType} activity, here are my top recommendations:\n\n`;
-  
-  recommendations.forEach((product, index) => {
-    const priceDisplay = typeof product.price === 'number' ? `$${product.price.toFixed(2)}` : product.price;
-    response += `${index + 1}. **${product.name}** (${priceDisplay})\n`;
-    response += `   Category: ${product.category}\n`;
-    response += `   Rating: ${product.rating || 'N/A'}\n\n`;
-  });
-
-  response += `These products are perfect for your needs! Feel free to click on any product to view more details or add it to your cart.`;
-  return response;
-}
+import { generateSportxResponse } from '@/lib/ai'
+import { localizeProducts } from '@/lib/product-i18n'
+import { recommendProducts, buildRecommendationFallback } from '@/lib/recommendations'
+import { formatPriceValue } from '@/lib/currency'
+import { parseLanguage } from '@/lib/translate'
 
 export async function POST(request: Request) {
   try {
-    const { budget, activityType, messages } = await request.json();
+    const { budget, activityType, messages, language: reqLanguage } = await request.json()
+    const language = parseLanguage(reqLanguage)
+    const catalog = localizeProducts(language)
 
-    // Filter products based on budget and activity type
-    const filteredProducts = products.filter((product) => {
-      // Handle price as number (from data) or string (from user input)
-      const priceNum = typeof product.price === 'string' ? parseFloat(product.price.replace('$', '')) : product.price;
-      const budgetNum = parseFloat(budget.replace('$', ''));
-      
-      // Match activity type with categories
-      const activityMatches = 
-        (activityType.toLowerCase().includes('running') && product.category.toLowerCase().includes('shoe')) ||
-        (activityType.toLowerCase().includes('gym') && (product.category.toLowerCase().includes('glove') || product.category.toLowerCase().includes('short') || product.category.toLowerCase().includes('shirt'))) ||
-        (activityType.toLowerCase().includes('yoga') && product.category.toLowerCase().includes('legging')) ||
-        (activityType.toLowerCase().includes('training') && (product.category.toLowerCase().includes('shirt') || product.category.toLowerCase().includes('legging') || product.category.toLowerCase().includes('short'))) ||
-        (activityType.toLowerCase().includes('casual') && (product.category.toLowerCase().includes('shirt') || product.category.toLowerCase().includes('short') || product.category.toLowerCase().includes('legging'))) ||
-        (activityType.toLowerCase().includes('sports') && (product.category.toLowerCase().includes('bra') || product.category.toLowerCase().includes('shirt') || product.category.toLowerCase().includes('short')));
+    const budgetNum = parseInt(String(budget).replace(/\D/g, ''), 10) || 1_000_000
+    const activity = String(activityType || '')
+    const recommended = recommendProducts(catalog, budgetNum, activity, 3)
 
-      return priceNum <= budgetNum && activityMatches;
-    });
+    const budgetLabel = formatPriceValue(budgetNum, 'UZS')
 
-    const systemPrompt = `You are a product recommendation expert for a sportswear store.
+    const extraContext = `## Recommendation request
+User budget: ${budgetLabel} (${budgetNum} UZS max)
+User activity: ${activity}
 
-User Budget: ${budget}
-User Activity: ${activityType}
+Pre-filtered best matches (use these as primary recommendations):
+${recommended.map((p, i) => `${i + 1}. ${p.name} — ${formatPriceValue(p.price, 'UZS')} — ${p.category}/${p.subcategory} — rating ${p.rating} — ${p.description.slice(0, 120)}`).join('\n') || 'No products within budget — suggest closest options from catalog.'}
 
-Available products that match their criteria:
-${filteredProducts.map(p => `- ${p.name} ($${p.price}) - ${p.category} - Rating: ${p.rating || 'N/A'}`).join('\n')}
-
-Based on their budget and activity type, recommend 2-3 products from the list above. 
-Explain why each product is suitable for their needs and activity level.
-Be friendly and helpful.`;
+Respond with 2-3 personalized recommendations from the list above. Include product name, price, and why it suits their activity.`
 
     try {
-      const response = await generateText({
-        model: modelId,
-        system: systemPrompt,
-        messages: messages.map((msg: any) => ({
-          role: msg.role,
+      const content = await generateSportxResponse(
+        language,
+        messages.map((msg: { role: string; content: string }) => ({
+          role: msg.role as 'user' | 'assistant',
           content: msg.content,
         })),
-        temperature: 0.7,
-        maxTokens: 600,
-      });
+        extraContext,
+      )
 
       return Response.json({
-        content: response.text,
-        recommendedProducts: filteredProducts.slice(0, 3),
-      });
-    } catch (aiError: any) {
-      // Use fallback recommendation if AI service fails
-      const fallbackResponse = generateFallbackRecommendation(budget, activityType, filteredProducts);
-      
+        content,
+        recommendedProducts: recommended,
+      })
+    } catch (error) {
+      console.error('AI recommendation fallback:', error)
       return Response.json({
-        content: fallbackResponse,
-        recommendedProducts: filteredProducts.slice(0, 3),
+        content: buildRecommendationFallback(language, activity, budgetLabel, recommended),
+        recommendedProducts: recommended,
         isFallback: true,
-      });
+      })
     }
   } catch (error) {
-    console.error('Recommendation API error:', error);
-    return Response.json(
-      { error: 'Failed to generate recommendations' },
-      { status: 500 }
-    );
+    console.error('Recommendation API error:', error)
+    return Response.json({ error: 'Failed to generate recommendations' }, { status: 500 })
   }
 }

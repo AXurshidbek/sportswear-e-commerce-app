@@ -94,8 +94,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         {
           id: "sp-1",
           name: "Pro Running Shoes X1",
-          price: 129.99,
-          originalPrice: 159.99,
+          price: 580_000,
+          originalPrice: 720_000,
           image: "/black-running-shoes-athletic.jpg",
           images: ["/black-running-shoes-side-view.jpg"],
           category: "men",
@@ -120,7 +120,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         {
           id: "sp-2",
           name: "Elite Training Tee",
-          price: 45.0,
+          price: 95_000,
           image: "/black-athletic-training-tshirt.jpg",
           images: ["/black-training-tee-front.jpg"],
           category: "men",
@@ -143,8 +143,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         {
           id: "sp-3",
           name: "Women's Flex Leggings",
-          price: 68.0,
-          originalPrice: 85.0,
+          price: 420_000,
+          originalPrice: 520_000,
           image: "/black-womens-athletic-leggings.jpg",
           images: ["/womens-leggings-front.jpg"],
           category: "women",
@@ -169,7 +169,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         {
           id: "sp-4",
           name: "Power Grip Gloves",
-          price: 35.0,
+          price: 120_000,
           image: "/fitness-gym-gloves-black.jpg",
           images: ["/gym-gloves-detail.jpg"],
           category: "accessories",
@@ -189,7 +189,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         {
           id: "sp-5",
           name: "Women's Sports Bra Pro",
-          price: 48.0,
+          price: 135_000,
           image: "/womens-black-sports-bra-athletic.jpg",
           images: ["/sports-bra-front-view.jpg"],
           category: "women",
@@ -212,7 +212,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         {
           id: "sp-6",
           name: "CrossFit Training Shorts",
-          price: 55.0,
+          price: 165_000,
           image: "/mens-athletic-training-shorts-black.jpg",
           images: ["/training-shorts-front.jpg"],
           category: "men",
@@ -231,7 +231,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           tags: ["crossfit", "training", "performance"],
           storeId: "store-2",
           storeName: "FitGear Pro",
-          discount: 10,
+          discount: 15_000,
           discountType: "fixed",
         },
       ]

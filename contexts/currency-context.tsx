@@ -1,8 +1,14 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import {
+  type Currency,
+  parseCurrency,
+  formatPriceValue,
+  CURRENCY_SYMBOLS,
+} from '@/lib/currency'
 
-export type Currency = 'UZS' | 'USD' | 'RUB'
+export type { Currency }
 
 interface CurrencyContextType {
   currency: Currency
@@ -13,53 +19,38 @@ interface CurrencyContextType {
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined)
 
-// Currency exchange rates (you can update these based on real rates)
-const EXCHANGE_RATES: Record<Currency, number> = {
-  'UZS': 1, // Base currency
-  'USD': 12500, // 1 USD = 12500 UZS (approximate)
-  'RUB': 140, // 1 RUB = 140 UZS (approximate)
+const CURRENCY_COOKIE = 'currency'
+
+function setCurrencyCookie(curr: Currency) {
+  document.cookie = `${CURRENCY_COOKIE}=${curr};path=/;max-age=31536000;SameSite=Lax`
 }
 
-const CURRENCY_SYMBOLS: Record<Currency, string> = {
-  'UZS': 'сўм',
-  'USD': '$',
-  'RUB': '₽',
-}
+export function CurrencyProvider({
+  children,
+  initialCurrency = 'UZS',
+}: {
+  children: React.ReactNode
+  initialCurrency?: Currency
+}) {
+  const [currency, setCurrencyState] = useState<Currency>(initialCurrency)
 
-export function CurrencyProvider({ children }: { children: React.ReactNode }) {
-  const [currency, setCurrencyState] = useState<Currency>('UZS')
-  const [mounted, setMounted] = useState(false)
-
-  // Initialize from localStorage on client
   useEffect(() => {
-    const saved = localStorage.getItem('currency') as Currency | null
-    if (saved && ['UZS', 'USD', 'RUB'].includes(saved)) {
+    const saved = parseCurrency(localStorage.getItem(CURRENCY_COOKIE))
+    if (saved !== currency) {
       setCurrencyState(saved)
     }
-    setMounted(true)
+    localStorage.setItem(CURRENCY_COOKIE, saved)
+    setCurrencyCookie(saved)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const setCurrency = useCallback((curr: Currency) => {
+    setCurrencyState(curr)
+    localStorage.setItem(CURRENCY_COOKIE, curr)
+    setCurrencyCookie(curr)
   }, [])
 
-  const setCurrency = (curr: Currency) => {
-    setCurrencyState(curr)
-    localStorage.setItem('currency', curr)
-  }
-
-  const formatPrice = (priceInUZS: number): string => {
-    const convertedPrice = priceInUZS / EXCHANGE_RATES[currency]
-    const symbol = CURRENCY_SYMBOLS[currency]
-
-    if (currency === 'UZS') {
-      return `${Math.round(convertedPrice).toLocaleString('uz-UZ')} ${symbol}`
-    } else if (currency === 'USD') {
-      return `${symbol}${convertedPrice.toFixed(2)}`
-    } else {
-      return `${convertedPrice.toFixed(2)} ${symbol}`
-    }
-  }
-
-  const getSymbol = (): string => CURRENCY_SYMBOLS[currency]
-
-  if (!mounted) return <>{children}</>
+  const formatPrice = useCallback((price: number) => formatPriceValue(price, currency), [currency])
+  const getSymbol = useCallback(() => CURRENCY_SYMBOLS[currency], [currency])
 
   return (
     <CurrencyContext.Provider value={{ currency, setCurrency, formatPrice, getSymbol }}>
@@ -71,13 +62,7 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
 export function useCurrency() {
   const context = useContext(CurrencyContext)
   if (context === undefined) {
-    // Return default UZS during SSR
-    return {
-      currency: 'UZS' as Currency,
-      setCurrency: () => {},
-      formatPrice: (price: number) => `${Math.round(price).toLocaleString('uz-UZ')} сўм`,
-      getSymbol: () => 'сўм',
-    }
+    throw new Error('useCurrency must be used within CurrencyProvider')
   }
   return context
 }

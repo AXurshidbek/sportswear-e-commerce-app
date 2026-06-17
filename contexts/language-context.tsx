@@ -1,8 +1,9 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { translate, parseLanguage, type Language } from '@/lib/translate'
 
-export type Language = 'uz' | 'en' | 'ru'
+export type { Language }
 
 interface LanguageContextType {
   language: Language
@@ -12,51 +13,37 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
-// Import translations
-import translations from '@/lib/translations'
+const LANGUAGE_COOKIE = 'language'
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('uz')
-  const [mounted, setMounted] = useState(false)
+function setLanguageCookie(lang: Language) {
+  document.cookie = `${LANGUAGE_COOKIE}=${lang};path=/;max-age=31536000;SameSite=Lax`
+}
 
-  // Initialize from localStorage on client
+export function LanguageProvider({
+  children,
+  initialLanguage = 'uz',
+}: {
+  children: React.ReactNode
+  initialLanguage?: Language
+}) {
+  const [language, setLanguageState] = useState<Language>(initialLanguage)
+
   useEffect(() => {
-    const saved = localStorage.getItem('language') as Language | null
-    if (saved && ['uz', 'en', 'ru'].includes(saved)) {
+    const saved = parseLanguage(localStorage.getItem(LANGUAGE_COOKIE))
+    if (saved !== language) {
       setLanguageState(saved)
     }
-    setMounted(true)
+    localStorage.setItem(LANGUAGE_COOKIE, saved)
+    setLanguageCookie(saved)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const setLanguage = useCallback((lang: Language) => {
+    setLanguageState(lang)
+    localStorage.setItem(LANGUAGE_COOKIE, lang)
+    setLanguageCookie(lang)
   }, [])
 
-  const setLanguage = (lang: Language) => {
-    setLanguageState(lang)
-    localStorage.setItem('language', lang)
-  }
-
-  const t = (key: string): string => {
-    const keys = key.split('.')
-    let value: any = translations[language]
-
-    for (const k of keys) {
-      if (value && typeof value === 'object' && k in value) {
-        value = value[k]
-      } else {
-        // Fallback to English if key not found
-        value = translations.en
-        for (const k of keys) {
-          if (value && typeof value === 'object' && k in value) {
-            value = value[k]
-          } else {
-            return key // Return key if still not found
-          }
-        }
-      }
-    }
-
-    return typeof value === 'string' ? value : key
-  }
-
-  if (!mounted) return <>{children}</>
+  const t = useCallback((key: string) => translate(language, key), [language])
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
@@ -68,12 +55,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 export function useLanguage() {
   const context = useContext(LanguageContext)
   if (context === undefined) {
-    // Return default Uzbek translation during SSR
-    return {
-      language: 'uz' as Language,
-      setLanguage: () => {},
-      t: (key: string) => translations.uz[key as any] || key,
-    }
+    throw new Error('useLanguage must be used within LanguageProvider')
   }
   return context
 }

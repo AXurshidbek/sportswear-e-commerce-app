@@ -1,5 +1,6 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
+import { cookies } from "next/headers"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
@@ -11,6 +12,9 @@ import { StoreProvider } from "@/contexts/store-context"
 import { ChatProvider } from "@/contexts/chat-bot-context"
 import { LanguageProvider } from "@/contexts/language-context"
 import { CurrencyProvider } from "@/contexts/currency-context"
+import ChatWidget from "@/components/chat-widget"
+import { parseLanguage } from "@/lib/translate"
+import { parseCurrency } from "@/lib/currency"
 import { Suspense } from "react"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -36,16 +40,20 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookieStore = await cookies()
+  const initialLanguage = parseLanguage(cookieStore.get("language")?.value)
+  const initialCurrency = parseCurrency(cookieStore.get("currency")?.value)
+
   return (
-    <html lang="en" className="dark">
+    <html lang={initialLanguage} className="dark" suppressHydrationWarning>
       <body className="font-sans antialiased">
-        <LanguageProvider>
-          <CurrencyProvider>
+        <LanguageProvider initialLanguage={initialLanguage}>
+          <CurrencyProvider initialCurrency={initialCurrency}>
             <ChatProvider>
               <AuthProvider>
                 <StoreProvider>
@@ -58,6 +66,7 @@ export default function RootLayout({
                   </SearchProvider>
                 </StoreProvider>
               </AuthProvider>
+              <ChatWidget />
             </ChatProvider>
           </CurrencyProvider>
         </LanguageProvider>

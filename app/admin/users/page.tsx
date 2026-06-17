@@ -48,7 +48,7 @@ export default function AdminUsersPage() {
     const demoUsers: RegisteredUser[] = [
       { id: "admin-1", name: "Admin", email: "admin@sportx.com", role: "admin" },
       { id: "vendor-1", name: "SPORTX Official", email: "vendor@sportx.com", role: "vendor", storeId: "store-1" },
-      { id: "user-1", name: "John Doe", email: "user@sportx.com", role: "customer" },
+      { id: "user-1", name: "Bobur Mahmudov", email: "mahmudobbobur787@gmail.com", role: "customer" },
     ]
     // Combine and dedupe
     const allUsers = [...demoUsers]

@@ -1,20 +1,23 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Heart, Minus, Plus, Share2, ChevronLeft, ChevronRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/contexts/cart-context"
 import { useWishlist } from "@/contexts/wishlist-context"
 import { useCurrency } from "@/contexts/currency-context"
+import { useLanguage } from "@/contexts/language-context"
 import { cn } from "@/lib/utils"
 import type { Product } from "@/lib/data"
+import { useLocalizedProduct } from "@/hooks/use-localized-product"
 
 interface ProductDetailProps {
   product: Product
 }
 
-export function ProductDetail({ product }: ProductDetailProps) {
+export function ProductDetail({ product: baseProduct }: ProductDetailProps) {
+  const product = useLocalizedProduct(baseProduct)
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState("")
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
@@ -24,7 +27,12 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
   const { formatPrice } = useCurrency()
+  const { t, language } = useLanguage()
   const inWishlist = isInWishlist(product.id)
+
+  useEffect(() => {
+    setSelectedColor(product.colors[0])
+  }, [product.id, language, product.colors])
 
   const allImages = [product.image, ...product.images]
 
@@ -68,7 +76,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             />
             {product.originalPrice && (
               <span className="absolute left-3 top-3 rounded bg-accent px-2 py-1 text-sm font-bold text-accent-foreground">
-                SALE
+                {t("common.sale")}
               </span>
             )}
             <button
@@ -119,7 +127,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
               <span className="text-accent">★</span>
               <span className="font-medium">{product.rating}</span>
             </div>
-            <span className="text-muted-foreground">({product.reviews} reviews)</span>
+            <span className="text-muted-foreground">({product.reviews} {t("products.reviews")})</span>
           </div>
 
           <div className="mt-4 flex items-baseline gap-3">
@@ -134,7 +142,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
           {/* Color Selection */}
           <div className="mt-6">
             <h3 className="mb-3 text-sm font-medium">
-              Color: <span className="text-muted-foreground">{selectedColor.name}</span>
+              {t("products.color")}: <span className="text-muted-foreground">{selectedColor.name}</span>
             </h3>
             <div className="flex gap-2">
               {product.colors.map((color) => (
@@ -160,7 +168,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
           {/* Size Selection */}
           <div className="mt-6">
-            <h3 className="mb-3 text-sm font-medium">Size</h3>
+            <h3 className="mb-3 text-sm font-medium">{t("products.size")}</h3>
             <div className="flex flex-wrap gap-2">
               {product.sizes.map((size) => (
                 <button
@@ -181,7 +189,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
           {/* Quantity */}
           <div className="mt-6">
-            <h3 className="mb-3 text-sm font-medium">Quantity</h3>
+            <h3 className="mb-3 text-sm font-medium">{t("cart.quantity")}</h3>
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
@@ -209,10 +217,10 @@ export function ProductDetail({ product }: ProductDetailProps) {
               {addedToCart ? (
                 <>
                   <Check className="h-5 w-5" />
-                  Added to Cart
+                  {t("products.addedToCart")}
                 </>
               ) : (
-                "Add to Cart"
+                t("products.addToCart")
               )}
             </Button>
             <Button
@@ -237,7 +245,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
           {/* Features */}
           <div className="mt-8">
-            <h3 className="mb-3 font-medium">Features</h3>
+            <h3 className="mb-3 font-medium">{t("products.features")}</h3>
             <ul className="space-y-2">
               {product.features.map((feature, index) => (
                 <li key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -251,7 +259,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
           {/* Stock Status */}
           <div className="mt-6 flex items-center gap-2">
             <span className={cn("h-2 w-2 rounded-full", product.inStock ? "bg-green-500" : "bg-red-500")} />
-            <span className="text-sm text-muted-foreground">{product.inStock ? "In Stock" : "Out of Stock"}</span>
+            <span className="text-sm text-muted-foreground">{product.inStock ? t("products.inStock") : t("products.outOfStock")}</span>
           </div>
         </div>
       </div>

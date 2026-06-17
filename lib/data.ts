@@ -22,8 +22,8 @@ export const products: Product[] = [
   {
     id: "1",
     name: "Real Madrid erkaklar formasi (Jersi)",
-    price: 129.99,
-    originalPrice: 159.99,
+    price: 580_000,
+    originalPrice: 720_000,
     image: "https://shop.realmadrid.com/cdn/shop/files/image_5_6c1e66e4-f72a-49a8-819c-1c13ef555e1b.webp?v=1767820849",
     images: ["https://shop.realmadrid.com/cdn/shop/files/image_4_d76cf7a1-fdf5-4404-9c43-91b59aebed87.webp?v=1767820848&width=2000", "https://shop.realmadrid.com/cdn/shop/files/image_4_d76cf7a1-fdf5-4404-9c43-91b59aebed87.webp?v=1767820848&width=2000", "https://i.pinimg.com/736x/11/81/fb/1181fb239378d259071b0756b54d8b18.jpg"],
     category: "men",
@@ -46,7 +46,7 @@ export const products: Product[] = [
   {
     id: "2",
     name: "Elite sport futbolkasi",
-    price: 45.0,
+    price: 95_000,
     image: "/black-athletic-training-tshirt.jpg",
     images: ["/black-training-tee-front.jpg", "/black-training-tee-back.jpg"],
     category: "men",
@@ -68,8 +68,8 @@ export const products: Product[] = [
   {
     id: "3",
     name: "Barcelona ayollar formasi (Jersi)",
-    price: 68.0,
-    originalPrice: 85.0,
+    price: 420_000,
+    originalPrice: 520_000,
     image: "https://static.nike.com/a/images/t_default/44312532-66cf-4240-968f-bc146b384924/FCB+WNK+DF+STAD+JSY+SS+HM.png",
     images: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpSQTxmHNSq2FS95L9jY7VZ2P2oyl9R5AlWw&s", "https://store.fcbarcelona.com/cdn/shop/files/FE70420026_1.jpg?v=1763655188&width=1200"],
     category: "women",
@@ -91,7 +91,7 @@ export const products: Product[] = [
   {
     id: "4",
     name: "Krossfit mashgʻulot shortilari",
-    price: 55.0,
+    price: 165_000,
     image: "/mens-athletic-training-shorts-black.jpg",
     images: ["/training-shorts-front.jpg", "/training-shorts-back.jpg"],
     category: "men",
@@ -112,7 +112,7 @@ export const products: Product[] = [
   {
     id: "5",
     name: "Ayollar Pro sport brayi (Top)",
-    price: 48.0,
+    price: 135_000,
     image: "/womens-black-sports-bra-athletic.jpg",
     images: ["/sports-bra-front.jpg"],
     category: "women",
@@ -134,8 +134,8 @@ export const products: Product[] = [
   {
     id: "6",
     name: "Bolalar uchun yugurish krossovkalari",
-    price: 65.0,
-    originalPrice: 75.0,
+    price: 285_000,
+    originalPrice: 340_000,
     image: "https://i5.walmartimages.com/seo/Rgdypko-Kid-s-Running-Sneaker-School-Athletic-Walking-Shoes-For-Children-Kids-Tennis-Lightweight-Kid-School-Shoes_c42c9526-6cc5-42a8-bd37-85a4ec71cdd6.aac806db324261030e69ee386b91b600.jpeg?odnHeight=573&odnWidth=573&odnBg=FFFFFF",
     images: ["https://i5.walmartimages.com/asr/57c83105-b59a-4f5d-81f8-77ce474ef26e.491c75baddecba85adaba6ae81c96c58.jpeg?odnHeight=573&odnWidth=573&odnBg=FFFFFF", "https://i5.walmartimages.com/asr/bf83a58e-5d2e-4630-94bb-86363e51356c.f08c9c47ae4301dc0e8619d3f0b45b76.jpeg?odnHeight=573&odnWidth=573&odnBg=FFFFFF"],
     category: "kids",
@@ -156,7 +156,7 @@ export const products: Product[] = [
   {
     id: "7",
     name: "Hajmli sport sumkasi",
-    price: 75.0,
+    price: 210_000,
     image: "https://cornellperformance.net/wp-content/uploads/2024/07/all-over-print-gym-bag-white-left-front-668d808494949-700x700.jpg",
     images: ["https://cornellperformance.net/wp-content/uploads/2024/07/all-over-print-gym-bag-white-right-front-668d808496653.jpg", "https://cornellperformance.net/wp-content/uploads/2024/07/all-over-print-gym-bag-white-left-front-668d808494949-700x700.jpg"],
     category: "accessories",
@@ -177,7 +177,7 @@ export const products: Product[] = [
   {
     id: "8",
     name: "Kompression paypoqlar (3 juft)",
-    price: 32.0,
+    price: 85_000,
     image: "https://oldbonestherapy.com/cdn/shop/files/OBT_CompressionSocks_Red_Blue_Pink.jpg?v=1767732437",
     images: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuzDaGgbQ4ltspt-3-pmHI2UPS2yXEPocOMg&s", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFyLaei6NNX5NJ3fapkD2LUG-HSLQTMJd4mQ&s"],
     category: "accessories",

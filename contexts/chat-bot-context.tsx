@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import { useLanguage } from '@/contexts/language-context';
 
 export interface Message {
   id: string;
@@ -18,7 +19,11 @@ export interface ChatContextType {
   setBudget: (budget: string) => void;
   setActivityType: (activityType: string) => void;
   addMessage: (role: 'user' | 'assistant', content: string) => void;
-  sendMessage: (content: string, type?: 'faq' | 'recommend' | 'search') => Promise<void>;
+  sendMessage: (
+    content: string,
+    type?: 'faq' | 'recommend' | 'search',
+    meta?: { budget?: string; activityType?: string },
+  ) => Promise<void>;
   toggleChat: () => void;
   clearChat: () => void;
 }
@@ -26,6 +31,7 @@ export interface ChatContextType {
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export function ChatProvider({ children }: { children: React.ReactNode }) {
+  const { language, t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -43,26 +49,34 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const sendMessage = useCallback(
-    async (content: string, type: 'faq' | 'recommend' | 'search' = 'faq') => {
+    async (
+      content: string,
+      type: 'faq' | 'recommend' | 'search' = 'faq',
+      meta?: { budget?: string; activityType?: string },
+    ) => {
       if (!content.trim()) return;
 
-      // Add user message
       addMessage('user', content);
       setIsLoading(true);
 
+      const activeBudget = meta?.budget ?? budget;
+      const activeActivity = meta?.activityType ?? activityType;
+
       try {
         let endpoint = '/api/chat';
-        let payload: any = {
-          messages: messages.concat([{ role: 'user', content }]).map(m => ({
-            role: m.role,
-            content: m.content,
-          })),
+        const history = [
+          ...messages.map((m) => ({ role: m.role, content: m.content })),
+          { role: 'user' as const, content },
+        ];
+        const payload: Record<string, unknown> = {
+          language,
+          messages: history,
         };
 
-        if (type === 'recommend' && budget && activityType) {
+        if (type === 'recommend' && activeBudget && activeActivity) {
           endpoint = '/api/chat/recommend';
-          payload.budget = budget;
-          payload.activityType = activityType;
+          payload.budget = activeBudget;
+          payload.activityType = activeActivity;
         } else if (type === 'search') {
           endpoint = '/api/chat/search';
           payload.query = content;
@@ -77,18 +91,19 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         if (!response.ok) throw new Error('Failed to get response');
 
         const data = await response.json();
-        addMessage('assistant', data.content);
+        const reply =
+          typeof data.content === 'string' && data.content.trim()
+            ? data.content
+            : t('chat.errorMessage');
+        addMessage('assistant', reply);
       } catch (error) {
         console.error('Error sending message:', error);
-        addMessage(
-          'assistant',
-          'Sorry, I encountered an error. Please try again.'
-        );
+        addMessage('assistant', t('chat.errorMessage'));
       } finally {
         setIsLoading(false);
       }
     },
-    [messages, budget, activityType, addMessage]
+    [messages, budget, activityType, addMessage, language, t],
   );
 
   const toggleChat = useCallback(() => {
@@ -101,22 +116,22 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     setActivityType('');
   }, []);
 
-  const value: ChatContextType = {
-    messages,
-    isLoading,
-    isOpen,
-    budget,
-    activityType,
-    setBudget,
-    setActivityType,
-    addMessage,
-    sendMessage,
-    toggleChat,
-    clearChat,
-  };
-
   return (
-    <ChatContext.Provider value={value}>
+    <ChatContext.Provider
+      value={{
+        messages,
+        isLoading,
+        isOpen,
+        budget,
+        activityType,
+        setBudget,
+        setActivityType,
+        addMessage,
+        sendMessage,
+        toggleChat,
+        clearChat,
+      }}
+    >
       {children}
     </ChatContext.Provider>
   );

@@ -6,16 +6,19 @@ import { Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useWishlist } from "@/contexts/wishlist-context"
 import { useCurrency } from "@/contexts/currency-context"
+import { useLanguage } from "@/contexts/language-context"
 import { cn } from "@/lib/utils"
-import type { Product } from "@/lib/data"
+import { useLocalizedProduct } from "@/hooks/use-localized-product"
 
 interface ProductCardProps {
   product: Product
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product: baseProduct }: ProductCardProps) {
+  const product = useLocalizedProduct(baseProduct)
   const { isInWishlist, toggleItem } = useWishlist()
   const { formatPrice } = useCurrency()
+  const { t } = useLanguage()
   const inWishlist = isInWishlist(product.id)
 
   return (
@@ -30,7 +33,7 @@ export function ProductCard({ product }: ProductCardProps) {
           />
           {product.originalPrice && (
             <span className="absolute left-2 top-2 rounded bg-accent px-2 py-1 text-xs font-bold text-accent-foreground">
-              SALE
+              {t("common.sale")}
             </span>
           )}
         </div>
@@ -68,7 +71,9 @@ export function ProductCard({ product }: ProductCardProps) {
         <Heart
           className={cn("h-4 w-4 transition-colors", inWishlist ? "fill-accent text-accent" : "text-foreground")}
         />
-        <span className="sr-only">{inWishlist ? "Remove from wishlist" : "Add to wishlist"}</span>
+        <span className="sr-only">
+          {inWishlist ? t("products.removeFromWishlist") : t("products.addToWishlist")}
+        </span>
       </Button>
     </div>
   )

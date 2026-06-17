@@ -1,21 +1,25 @@
+"use client"
+
 import { products } from "@/lib/data"
 import { ProductCard } from "@/components/product-card"
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export function NewArrivals() {
+  const { t } = useLanguage()
   const newProducts = products.slice(0, 4)
 
   return (
     <section className="py-8 md:py-12">
       <div className="container mx-auto px-4">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-bold tracking-tight md:text-2xl">New Arrivals</h2>
+        <div className="mb-6 flex items-center justify-between gap-2">
+          <h2 className="text-xl font-bold tracking-tight md:text-2xl">{t("products.newArrivals")}</h2>
           <Link
             href="/products?tag=new"
-            className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="flex shrink-0 items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
-            View All
+            {t("products.viewAll")}
             <ChevronRight className="h-4 w-4" />
           </Link>
         </div>

@@ -1,5 +1,6 @@
 "use client"
 
+import { useCallback, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { SlidersHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -8,12 +9,14 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { categories, brands } from "@/lib/data"
-import { useState, useCallback } from "react"
+import { MAX_PRICE_FILTER_UZS, PRICE_FILTER_STEP_UZS } from "@/lib/pricing"
+import { useCurrency } from "@/contexts/currency-context"
 
 export function ProductFilters() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [priceRange, setPriceRange] = useState([0, 200])
+  const { formatPrice } = useCurrency()
+  const [priceRange, setPriceRange] = useState([0, MAX_PRICE_FILTER_UZS])
   const [open, setOpen] = useState(false)
 
   const currentCategory = searchParams.get("category")
@@ -46,7 +49,7 @@ export function ProductFilters() {
     } else {
       params.delete("minPrice")
     }
-    if (priceRange[1] < 200) {
+    if (priceRange[1] < MAX_PRICE_FILTER_UZS) {
       params.set("maxPrice", priceRange[1].toString())
     } else {
       params.delete("maxPrice")
@@ -56,7 +59,7 @@ export function ProductFilters() {
 
   const clearFilters = () => {
     router.push("/products")
-    setPriceRange([0, 200])
+    setPriceRange([0, MAX_PRICE_FILTER_UZS])
     setOpen(false)
   }
 
@@ -127,10 +130,17 @@ export function ProductFilters() {
           {/* Price Range */}
           <div>
             <h3 className="mb-3 font-medium text-foreground">Price Range</h3>
-            <Slider value={priceRange} onValueChange={setPriceRange} min={0} max={200} step={10} className="mb-4" />
+            <Slider
+              value={priceRange}
+              onValueChange={setPriceRange}
+              min={0}
+              max={MAX_PRICE_FILTER_UZS}
+              step={PRICE_FILTER_STEP_UZS}
+              className="mb-4"
+            />
             <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <span>${priceRange[0]}</span>
-              <span>${priceRange[1]}</span>
+              <span>{formatPrice(priceRange[0])}</span>
+              <span>{formatPrice(priceRange[1])}</span>
             </div>
             <Button variant="secondary" size="sm" className="mt-3 w-full" onClick={applyPriceFilter}>
               Apply Price

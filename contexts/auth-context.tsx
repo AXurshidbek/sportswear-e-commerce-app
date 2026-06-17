@@ -70,7 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return true
     }
     if (email === "user@sportx.com" && password === "user123") {
-      const userData: User = { id: "user-1", name: "John Doe", email, role: "customer" }
+      const userData: User = { id: "user-1", name: "Bobur Mahmudov", email: "mahmudobbobur787@gmail.com", role: "customer" }
       setUser(userData)
       localStorage.setItem("user", JSON.stringify(userData))
       return true

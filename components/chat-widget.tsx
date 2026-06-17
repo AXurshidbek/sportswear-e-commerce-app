@@ -2,85 +2,80 @@
 
 import { useState } from 'react';
 import { useChatBot } from '@/contexts/chat-bot-context';
-import { MessageCircle, X, Send } from 'lucide-react';
+import { useLanguage } from '@/contexts/language-context';
+import { MessageCircle, X } from 'lucide-react';
 import ChatMessages from './chat-messages';
 import ChatInput from './chat-input';
+import RecommendationForm from './recommendation-form';
 
 export default function ChatWidget() {
   const { isOpen, toggleChat, messages } = useChatBot();
+  const { t } = useLanguage();
   const [showRecommendationForm, setShowRecommendationForm] = useState(false);
 
   return (
-    <div className="fixed bottom-20 left-6 z-40 md:bottom-6">
-      {/* Chat Window */}
+    <div className="fixed bottom-20 left-4 z-40 sm:left-6 md:bottom-6">
       {isOpen && (
-        <div className="absolute bottom-full mb-3 left-0 w-96 max-w-[calc(100vw-2rem)] bg-card rounded-2xl shadow-2xl border border-border overflow-hidden flex flex-col h-[600px]">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-accent to-accent/80 text-accent-foreground p-5 flex items-center justify-between">
+        <div className="absolute bottom-full mb-3 left-0 flex h-[min(600px,calc(100vh-8rem))] w-[min(384px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
+          <div className="flex items-center justify-between bg-gradient-to-r from-accent to-accent/80 p-4 text-accent-foreground sm:p-5">
             <div className="flex items-center gap-3">
-              <div className="bg-accent-foreground/20 rounded-lg p-2">
-                <MessageCircle className="w-5 h-5" />
+              <div className="rounded-lg bg-accent-foreground/20 p-2">
+                <MessageCircle className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="font-bold text-base">SPORTX Assistant</h2>
-                <p className="text-xs text-accent-foreground/80">Powered by Claude AI</p>
+                <h2 className="text-base font-bold">{t('chat.assistantTitle')}</h2>
+                <p className="text-xs text-accent-foreground/80">{t('chat.poweredBy')}</p>
               </div>
             </div>
             <button
               onClick={toggleChat}
-              className="hover:bg-accent-foreground/10 p-2 rounded-full transition-colors"
+              className="rounded-full p-2 transition-colors hover:bg-accent-foreground/10"
               aria-label="Close chat"
             >
-              <X className="w-5 h-5" />
+              <X className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Messages Area */}
           <div className="flex-1 overflow-y-auto bg-background">
-            {messages.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center p-6 text-center">
-                <div className="bg-accent/10 rounded-full p-4 mb-4">
-                  <MessageCircle className="w-8 h-8 text-accent" />
+            {messages.length === 0 && !showRecommendationForm ? (
+              <div className="flex h-full flex-col items-center justify-center p-6 text-center">
+                <div className="mb-4 rounded-full bg-accent/10 p-4">
+                  <MessageCircle className="h-8 w-8 text-accent" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">
-                  Hello! 👋
-                </h3>
-                <p className="text-sm text-muted-foreground mb-6">
-                  I can help you find the perfect gear for your activities!
-                </p>
-                <div className="space-y-3 w-full">
+                <h3 className="mb-2 font-semibold text-foreground">{t('chat.hello')}</h3>
+                <p className="mb-6 text-sm text-muted-foreground">{t('chat.welcomeMessage')}</p>
+                <div className="w-full space-y-3">
                   <button
                     onClick={() => setShowRecommendationForm(true)}
-                    className="w-full px-4 py-2 bg-accent text-accent-foreground text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors"
+                    className="w-full rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90"
                   >
-                    Get Recommendations
+                    {t('chat.getRecommendations')}
                   </button>
-                  <p className="text-xs text-muted-foreground">
-                    Or ask me about shipping, returns, sizing, and more!
-                  </p>
+                  <p className="text-xs text-muted-foreground">{t('chat.askAnything')}</p>
                 </div>
               </div>
+            ) : messages.length === 0 && showRecommendationForm ? (
+              <div className="p-4">
+                <RecommendationForm onSubmitted={() => setShowRecommendationForm(false)} />
+              </div>
             ) : (
-              <ChatMessages showRecommendationForm={showRecommendationForm} />
+              <ChatMessages
+                showRecommendationForm={showRecommendationForm}
+                onRecommendationSubmitted={() => setShowRecommendationForm(false)}
+              />
             )}
           </div>
 
-          {/* Input Area */}
           <ChatInput setShowRecommendationForm={setShowRecommendationForm} />
         </div>
       )}
 
-      {/* Chat Button */}
       <button
         onClick={toggleChat}
-        className="bg-accent text-accent-foreground rounded-full p-4 shadow-lg hover:shadow-xl hover:bg-accent/90 transition-all duration-200 flex items-center justify-center"
+        className="flex items-center justify-center rounded-full bg-accent p-4 text-accent-foreground shadow-lg transition-all duration-200 hover:bg-accent/90 hover:shadow-xl"
         aria-label="Open chat"
       >
-        {isOpen ? (
-          <X className="w-6 h-6" />
-        ) : (
-          <MessageCircle className="w-6 h-6" />
-        )}
+        {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
       </button>
     </div>
   );
