@@ -6,6 +6,7 @@ import { Heart, Minus, Plus, Share2, ChevronLeft, ChevronRight, Check } from "lu
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/contexts/cart-context"
 import { useWishlist } from "@/contexts/wishlist-context"
+import { useCurrency } from "@/contexts/currency-context"
 import { cn } from "@/lib/utils"
 import type { Product } from "@/lib/data"
 
@@ -22,6 +23,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
   const { addItem } = useCart()
   const { isInWishlist, toggleItem } = useWishlist()
+  const { formatPrice } = useCurrency()
   const inWishlist = isInWishlist(product.id)
 
   const allImages = [product.image, ...product.images]
@@ -121,9 +123,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
           </div>
 
           <div className="mt-4 flex items-baseline gap-3">
-            <span className="text-3xl font-bold">${product.price.toFixed(2)}</span>
+            <span className="text-3xl font-bold">{formatPrice(product.price)}</span>
             {product.originalPrice && (
-              <span className="text-lg text-muted-foreground line-through">${product.originalPrice.toFixed(2)}</span>
+              <span className="text-lg text-muted-foreground line-through">{formatPrice(product.originalPrice)}</span>
             )}
           </div>
 

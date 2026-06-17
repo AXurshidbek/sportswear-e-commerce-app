@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useWishlist } from "@/contexts/wishlist-context"
+import { useCurrency } from "@/contexts/currency-context"
 import { cn } from "@/lib/utils"
 import type { Product } from "@/lib/data"
 
@@ -14,6 +15,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { isInWishlist, toggleItem } = useWishlist()
+  const { formatPrice } = useCurrency()
   const inWishlist = isInWishlist(product.id)
 
   return (
@@ -36,9 +38,9 @@ export function ProductCard({ product }: ProductCardProps) {
           <p className="text-xs text-muted-foreground">{product.brand}</p>
           <h3 className="mt-1 text-sm font-medium text-foreground line-clamp-2">{product.name}</h3>
           <div className="mt-1 flex items-center gap-2">
-            <span className="font-bold text-foreground">${product.price.toFixed(2)}</span>
+            <span className="font-bold text-foreground">{formatPrice(product.price)}</span>
             {product.originalPrice && (
-              <span className="text-sm text-muted-foreground line-through">${product.originalPrice.toFixed(2)}</span>
+              <span className="text-sm text-muted-foreground line-through">{formatPrice(product.originalPrice)}</span>
             )}
           </div>
           <div className="mt-1 flex items-center gap-1">
