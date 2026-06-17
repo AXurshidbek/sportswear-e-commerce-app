@@ -5,6 +5,7 @@ import { CategoryGrid } from "@/components/category-grid"
 import { FeaturedProducts } from "@/components/featured-products"
 import { NewArrivals } from "@/components/new-arrivals"
 import ChatWidget from "@/components/chat-widget"
+import { TranslationDemo } from "@/components/translation-demo"
 
 export default function HomePage() {
   return (
@@ -12,6 +13,9 @@ export default function HomePage() {
       <Header />
       <main>
         <HeroBanner />
+        <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
+          <TranslationDemo />
+        </div>
         <CategoryGrid />
         <FeaturedProducts />
         <NewArrivals />

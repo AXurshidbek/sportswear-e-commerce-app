@@ -162,6 +162,9 @@ export const translations = {
       success: 'Muvaffaqiyatli',
       warning: 'Ogohlantirish',
       info: 'Ma\'lumot',
+      current_language: 'Joriy til',
+      current_currency: 'Joriy valyuta',
+      example_price: 'Misol narx',
     },
   },
   en: {
@@ -327,6 +330,9 @@ export const translations = {
       success: 'Success',
       warning: 'Warning',
       info: 'Info',
+      current_language: 'Current Language',
+      current_currency: 'Current Currency',
+      example_price: 'Example Price',
     },
   },
   ru: {
@@ -492,6 +498,9 @@ export const translations = {
       success: 'Успешно',
       warning: 'Предупреждение',
       info: 'Информация',
+      current_language: 'Текущий язык',
+      current_currency: 'Текущая валюта',
+      example_price: 'Примерная цена',
     },
   },
 }
