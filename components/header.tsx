@@ -25,7 +25,7 @@ import {
 
 const categories = [
   {
-    name: "Men",
+    name: "Erkaklar",
     href: "/products?category=men",
     subcategories: [
       { name: "Shoes", href: "/products?category=men&subcategory=shoes" },
@@ -35,7 +35,7 @@ const categories = [
     ],
   },
   {
-    name: "Women",
+    name: "Ayollar",
     href: "/products?category=women",
     subcategories: [
       { name: "Shoes", href: "/products?category=women&subcategory=shoes" },
@@ -45,7 +45,7 @@ const categories = [
     ],
   },
   {
-    name: "Kids",
+    name: "Bolalar",
     href: "/products?category=kids",
     subcategories: [
       { name: "Shoes", href: "/products?category=kids&subcategory=shoes" },
@@ -53,7 +53,7 @@ const categories = [
     ],
   },
   {
-    name: "accessories",
+    name: "Aksesuarlar",
     href: "/products?category=accessories",
     subcategories: [
       { name: "Bags", href: "/products?category=accessories&subcategory=bags" },
