@@ -206,7 +206,7 @@ export default function AdminProductsPage() {
                   <SelectItem value="men">Erkaklar</SelectItem>
                   <SelectItem value="women">Ayollar</SelectItem>
                   <SelectItem value="kids">Bolalar</SelectItem>
-                  <SelectItem value="Aksesuarlar">Aksesuarlar</SelectItem>
+                  <SelectItem value="accecories">Aksesuarlar</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={storeFilter} onValueChange={setStoreFilter}>
