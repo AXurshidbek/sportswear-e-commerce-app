@@ -53,13 +53,13 @@ const categories = [
     ],
   },
   {
-    name: "Aksesuarlar",
-    href: "/products?category=Aksesuarlar",
+    name: "accessories",
+    href: "/products?category=accessories",
     subcategories: [
-      { name: "Bags", href: "/products?category=Aksesuarlar&subcategory=bags" },
-      { name: "Socks", href: "/products?category=Aksesuarlar&subcategory=socks" },
-      { name: "Gloves", href: "/products?category=Aksesuarlar&subcategory=gloves" },
-      { name: "Hats", href: "/products?category=Aksesuarlar&subcategory=hats" },
+      { name: "Bags", href: "/products?category=accessories&subcategory=bags" },
+      { name: "Socks", href: "/products?category=accessories&subcategory=socks" },
+      { name: "Gloves", href: "/products?category=accessories&subcategory=gloves" },
+      { name: "Hats", href: "/products?category=accessories&subcategory=hats" },
     ],
   },
 ]

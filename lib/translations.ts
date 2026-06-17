@@ -37,7 +37,7 @@ export const translations = {
       sportsBra: 'Sport Lifchigi',
       gloves: 'Qo\'lqop',
       kids: 'Bolalar',
-      Aksesuarlar: 'Aksessuarlar',
+      accessories: 'Aksessuarlar',
     },
     // Products
     products: {
@@ -205,7 +205,7 @@ export const translations = {
       sportsBra: 'Sports Bra',
       gloves: 'Gloves',
       kids: 'Kids',
-      Aksesuarlar: 'Aksesuarlar',
+      accessories: 'accessories',
     },
     // Products
     products: {
@@ -373,7 +373,7 @@ export const translations = {
       sportsBra: 'Спортивный бюстгальтер',
       gloves: 'Перчатки',
       kids: 'Дети',
-      Aksesuarlar: 'Аксессуары',
+      accessories: 'Аксессуары',
     },
     // Products
     products: {

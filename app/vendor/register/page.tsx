@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Store, ArrowRight, CheckCircle } from "lucide-react"
 
-const availableCategories = ["men", "women", "kids", "Aksesuarlar"]
+const availableCategories = ["men", "women", "kids", "accessories"]
 
 export default function VendorRegisterPage() {
   const router = useRouter()
@@ -254,8 +254,8 @@ export default function VendorRegisterPage() {
                       type="button"
                       onClick={() => toggleCategory(category)}
                       className={`rounded-full px-4 py-2 text-sm font-medium capitalize transition-colors ${selectedCategories.includes(category)
-                          ? "bg-accent text-accent-foreground"
-                          : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        ? "bg-accent text-accent-foreground"
+                        : "bg-muted text-muted-foreground hover:bg-muted/80"
                         }`}
                     >
                       {category}

@@ -199,7 +199,7 @@ export default function VendorProductsPage() {
                   <SelectItem value="men">Men</SelectItem>
                   <SelectItem value="women">Women</SelectItem>
                   <SelectItem value="kids">Kids</SelectItem>
-                  <SelectItem value="Aksesuarlar">Aksesuarlar</SelectItem>
+                  <SelectItem value="accessories">accessories</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={stockFilter} onValueChange={setStockFilter}>
