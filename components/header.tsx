@@ -9,6 +9,9 @@ import { Button } from "@/components/ui/button"
 import { useCart } from "@/contexts/cart-context"
 import { useSearch } from "@/contexts/search-context"
 import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
+import { useCurrency } from "@/contexts/currency-context"
+import LanguageCurrencySelector from "@/components/language-currency-selector"
 import { useState, useRef, useEffect } from "react"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
@@ -265,6 +268,9 @@ export function Header() {
             Stores
           </Link>
         </nav>
+
+        {/* Language & Currency Selector */}
+        <LanguageCurrencySelector />
 
         {/* Actions */}
         <div className="flex items-center gap-1 md:gap-2">

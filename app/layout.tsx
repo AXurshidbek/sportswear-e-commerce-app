@@ -9,6 +9,8 @@ import { SearchProvider } from "@/contexts/search-context"
 import { AuthProvider } from "@/contexts/auth-context"
 import { StoreProvider } from "@/contexts/store-context"
 import { ChatProvider } from "@/contexts/chat-bot-context"
+import { LanguageProvider } from "@/contexts/language-context"
+import { CurrencyProvider } from "@/contexts/currency-context"
 import { Suspense } from "react"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -42,19 +44,23 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="font-sans antialiased">
-        <ChatProvider>
-          <AuthProvider>
-            <StoreProvider>
-              <SearchProvider>
-                <CartProvider>
-                  <Suspense fallback={null}>
-                    <WishlistProvider>{children}</WishlistProvider>
-                  </Suspense>
-                </CartProvider>
-              </SearchProvider>
-            </StoreProvider>
-          </AuthProvider>
-        </ChatProvider>
+        <LanguageProvider>
+          <CurrencyProvider>
+            <ChatProvider>
+              <AuthProvider>
+                <StoreProvider>
+                  <SearchProvider>
+                    <CartProvider>
+                      <Suspense fallback={null}>
+                        <WishlistProvider>{children}</WishlistProvider>
+                      </Suspense>
+                    </CartProvider>
+                  </SearchProvider>
+                </StoreProvider>
+              </AuthProvider>
+            </ChatProvider>
+          </CurrencyProvider>
+        </LanguageProvider>
         <Analytics />
       </body>
     </html>
