@@ -11,10 +11,10 @@ export default function ChatWidget() {
   const [showRecommendationForm, setShowRecommendationForm] = useState(false);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed top-20 right-6 z-50 md:top-24">
       {/* Chat Window */}
       {isOpen && (
-        <div className="absolute bottom-20 right-0 w-96 max-w-[calc(100vw-2rem)] bg-card rounded-2xl shadow-2xl border border-border overflow-hidden flex flex-col h-[600px]">
+        <div className="absolute top-full mt-3 right-0 w-96 max-w-[calc(100vw-2rem)] bg-card rounded-2xl shadow-2xl border border-border overflow-hidden flex flex-col h-[600px]">
           {/* Header */}
           <div className="bg-gradient-to-r from-accent to-accent/80 text-accent-foreground p-5 flex items-center justify-between">
             <div className="flex items-center gap-3">

@@ -20,12 +20,12 @@ export default function LanguageCurrencySelector() {
   const currencies: Currency[] = ['UZS', 'USD', 'RUB']
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1 md:gap-2">
       {/* Language Selector */}
       <div className="relative">
         <button
           onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-          className="hidden md:flex items-center gap-1 px-3 py-2 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors text-sm font-medium text-foreground"
+          className="flex items-center gap-1 px-2 md:px-3 py-2 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors text-xs md:text-sm font-medium text-foreground"
         >
           <Globe className="h-4 w-4" />
           <span>{language.toUpperCase()}</span>
@@ -56,7 +56,7 @@ export default function LanguageCurrencySelector() {
       <div className="relative">
         <button
           onClick={() => setShowCurrencyMenu(!showCurrencyMenu)}
-          className="hidden md:flex items-center gap-1 px-3 py-2 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors text-sm font-medium text-foreground"
+          className="flex items-center gap-1 px-2 md:px-3 py-2 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors text-xs md:text-sm font-medium text-foreground"
         >
           <DollarSign className="h-4 w-4" />
           <span>{currency}</span>
