@@ -202,10 +202,10 @@ export default function AdminProductsPage() {
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="men">Men</SelectItem>
-                  <SelectItem value="women">Women</SelectItem>
-                  <SelectItem value="kids">Kids</SelectItem>
+                  <SelectItem value="all">Barchasi</SelectItem>
+                  <SelectItem value="men">Erkaklar</SelectItem>
+                  <SelectItem value="women">Ayollar</SelectItem>
+                  <SelectItem value="kids">Bolalar</SelectItem>
                   <SelectItem value="Aksesuarlar">Aksesuarlar</SelectItem>
                 </SelectContent>
               </Select>
