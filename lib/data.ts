@@ -159,7 +159,7 @@ export const products: Product[] = [
     price: 75.0,
     image: "https://cornellperformance.net/wp-content/uploads/2024/07/all-over-print-gym-bag-white-left-front-668d808494949-700x700.jpg",
     images: ["https://cornellperformance.net/wp-content/uploads/2024/07/all-over-print-gym-bag-white-right-front-668d808496653.jpg", "https://cornellperformance.net/wp-content/uploads/2024/07/all-over-print-gym-bag-white-left-front-668d808494949-700x700.jpg"],
-    category: "accessories",
+    category: "Aksesuarlar",
     subcategory: "bags",
     brand: "SPORTX",
     sizes: ["One Size"],
@@ -180,7 +180,7 @@ export const products: Product[] = [
     price: 32.0,
     image: "https://oldbonestherapy.com/cdn/shop/files/OBT_CompressionSocks_Red_Blue_Pink.jpg?v=1767732437",
     images: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuzDaGgbQ4ltspt-3-pmHI2UPS2yXEPocOMg&s", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFyLaei6NNX5NJ3fapkD2LUG-HSLQTMJd4mQ&s"],
-    category: "accessories",
+    category: "Aksesuarlar",
     subcategory: "socks",
     brand: "SPORTX",
     sizes: ["S", "M", "L", "XL"],
@@ -201,7 +201,7 @@ export const categories = [
   { id: "men", name: "Men", image: "https://i.guim.co.uk/img/media/e5a60fe02429db588fdd910fcfa259b9c78b4e60/0_73_3313_1988/master/3313.jpg?width=620&dpr=2&s=none&crop=none" },
   { id: "women", name: "Women", image: "https://lancedelas.pt/wp-content/uploads/2025/09/1000135038.jpg?w=1440" },
   { id: "kids", name: "Kids", image: "https://m.media-amazon.com/images/I/71IJPqcYHhL._AC_UY350_.jpg" },
-  { id: "accessories", name: "Accessories", image: "https://img.freepik.com/free-photo/football-equipment-grass_23-2147833422.jpg" },
+  { id: "Aksesuarlar", name: "Aksesuarlar", image: "https://img.freepik.com/free-photo/football-equipment-grass_23-2147833422.jpg" },
 ]
 
 export const brands = ["SPORTX", "SPORTX Junior", "Nike", "Adidas", "Under Armour", "Puma"]

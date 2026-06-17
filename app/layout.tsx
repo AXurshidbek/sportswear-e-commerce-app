@@ -19,7 +19,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "SPORTX | Premium Athletic Wear Marketplace",
   description:
-    "Shop the latest sportswear from multiple vendors. Athletic apparel and accessories for men, women, and kids.",
+    "Shop the latest sportswear from multiple vendors. Athletic apparel and Aksesuarlar for men, women, and kids.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

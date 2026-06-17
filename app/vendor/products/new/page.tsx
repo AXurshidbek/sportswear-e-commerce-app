@@ -14,12 +14,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { ArrowLeft, Plus, X } from "lucide-react"
 
-const availableCategories = ["men", "women", "kids", "accessories"]
+const availableCategories = ["men", "women", "kids", "Aksesuarlar"]
 const availableSubcategories: Record<string, string[]> = {
   men: ["shoes", "tops", "bottoms", "jackets"],
   women: ["shoes", "tops", "bottoms", "sports-bras", "jackets"],
   kids: ["shoes", "clothing"],
-  accessories: ["bags", "socks", "gloves", "hats", "equipment"],
+  Aksesuarlar: ["bags", "socks", "gloves", "hats", "equipment"],
 }
 
 export default function NewProductPage() {
