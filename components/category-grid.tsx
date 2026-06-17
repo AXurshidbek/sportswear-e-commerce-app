@@ -6,7 +6,7 @@ export function CategoryGrid() {
   return (
     <section className="py-8 md:py-12">
       <div className="container mx-auto px-4">
-        <h2 className="mb-6 text-xl font-bold tracking-tight md:text-2xl">Shop by Category</h2>
+        <h2 className="mb-6 text-xl font-bold tracking-tight md:text-2xl">Kategoriyalar bo'yicha savdo</h2>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
           {categories.map((category) => (
             <Link

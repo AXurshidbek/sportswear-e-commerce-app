@@ -12,11 +12,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useCart } from "@/contexts/cart-context"
+import { useCurrency } from "@/contexts/currency-context"
 import { cn } from "@/lib/utils"
 
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, total, clearCart } = useCart()
+  const { formatPrice } = useCurrency()
   const [paymentMethod, setPaymentMethod] = useState("card")
   const [promoCode, setPromoCode] = useState("")
   const [discount, setDiscount] = useState(0)
@@ -198,7 +200,7 @@ export default function CheckoutPage() {
                         {item.size} x {item.quantity}
                       </p>
                     </div>
-                    <p className="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="text-sm font-medium">{formatPrice(item.price * item.quantity)}</p>
                   </div>
                 ))}
               </div>
@@ -221,7 +223,7 @@ export default function CheckoutPage() {
                   </Button>
                 </div>
                 {discount > 0 && (
-                  <p className="mt-2 text-sm text-green-500">Discount applied: -${discount.toFixed(2)}</p>
+                  <p className="mt-2 text-sm text-green-500">Discount applied: -{formatPrice(discount)}</p>
                 )}
               </div>
 
@@ -229,25 +231,25 @@ export default function CheckoutPage() {
               <div className="mt-4 space-y-3 border-t border-border pt-4">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>{formatPrice(total)}</span>
                 </div>
                 {discount > 0 && (
                   <div className="flex justify-between text-sm text-green-500">
                     <span>Discount</span>
-                    <span>-${discount.toFixed(2)}</span>
+                    <span>-{formatPrice(discount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                  <span>{shipping === 0 ? "Free" : formatPrice(shipping)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Tax</span>
-                  <span>${tax.toFixed(2)}</span>
+                  <span>{formatPrice(tax)}</span>
                 </div>
                 <div className="flex justify-between border-t border-border pt-3 font-bold">
                   <span>Total</span>
-                  <span>${finalTotal.toFixed(2)}</span>
+                  <span>{formatPrice(finalTotal)}</span>
                 </div>
               </div>
 

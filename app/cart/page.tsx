@@ -7,9 +7,11 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/contexts/cart-context"
+import { useCurrency } from "@/contexts/currency-context"
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, total, clearCart } = useCart()
+  const { formatPrice } = useCurrency()
 
   if (items.length === 0) {
     return (
@@ -63,7 +65,7 @@ export default function CartPage() {
                           {item.color} / {item.size}
                         </p>
                       </div>
-                      <p className="font-bold">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="font-bold">{formatPrice(item.price * item.quantity)}</p>
                     </div>
                     <div className="mt-auto flex items-center justify-between pt-3">
                       <div className="flex items-center gap-2">
@@ -107,20 +109,20 @@ export default function CartPage() {
               <div className="mt-4 space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>{formatPrice(total)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span>{total > 100 ? "Free" : "$9.99"}</span>
+                  <span>{total > 100 ? "Free" : formatPrice(9.99)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Tax</span>
-                  <span>${(total * 0.08).toFixed(2)}</span>
+                  <span>{formatPrice(total * 0.08)}</span>
                 </div>
                 <div className="border-t border-border pt-3">
                   <div className="flex justify-between font-bold">
                     <span>Total</span>
-                    <span>${(total + (total > 100 ? 0 : 9.99) + total * 0.08).toFixed(2)}</span>
+                    <span>{formatPrice(total + (total > 100 ? 0 : 9.99) + total * 0.08)}</span>
                   </div>
                 </div>
               </div>

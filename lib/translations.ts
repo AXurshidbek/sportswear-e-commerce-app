@@ -205,7 +205,7 @@ export const translations = {
       sportsBra: 'Sports Bra',
       gloves: 'Gloves',
       kids: 'Kids',
-      accessories: 'Accessories',
+      accessories: 'accessories',
     },
     // Products
     products: {

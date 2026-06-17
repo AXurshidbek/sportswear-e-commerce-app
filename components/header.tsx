@@ -25,41 +25,41 @@ import {
 
 const categories = [
   {
-    name: "Men",
+    name: "Erkaklar",
     href: "/products?category=men",
     subcategories: [
-      { name: "Shoes", href: "/products?category=men&subcategory=shoes" },
-      { name: "Tops", href: "/products?category=men&subcategory=tops" },
-      { name: "Bottoms", href: "/products?category=men&subcategory=bottoms" },
-      { name: "Jackets", href: "/products?category=men&subcategory=jackets" },
+      { name: "Oyoq kiyimlar", href: "/products?category=men&subcategory=shoes" },
+      { name: "Ust kiyimlar", href: "/products?category=men&subcategory=tops" },
+      { name: "Ost kiyimlar", href: "/products?category=men&subcategory=bottoms" },
+      { name: "Futbolkalar", href: "/products?category=men&subcategory=jackets" },
     ],
   },
   {
-    name: "Women",
+    name: "Ayollar",
     href: "/products?category=women",
     subcategories: [
-      { name: "Shoes", href: "/products?category=women&subcategory=shoes" },
-      { name: "Tops", href: "/products?category=women&subcategory=tops" },
-      { name: "Bottoms", href: "/products?category=women&subcategory=bottoms" },
-      { name: "Sports Bras", href: "/products?category=women&subcategory=sports-bras" },
+      { name: "Oyoq kiyimlar", href: "/products?category=women&subcategory=shoes" },
+      { name: "Ust kiyimlar", href: "/products?category=women&subcategory=tops" },
+      { name: "Ost kiyimlar", href: "/products?category=women&subcategory=bottoms" },
+      { name: "Qo'shimcha", href: "/products?category=women&subcategory=sports-bras" },
     ],
   },
   {
-    name: "Kids",
+    name: "Bolalar",
     href: "/products?category=kids",
     subcategories: [
-      { name: "Shoes", href: "/products?category=kids&subcategory=shoes" },
-      { name: "Clothing", href: "/products?category=kids&subcategory=clothing" },
+      { name: "Oyoq kiymlar", href: "/products?category=kids&subcategory=shoes" },
+      { name: "Kiyimlar", href: "/products?category=kids&subcategory=clothing" },
     ],
   },
   {
-    name: "Accessories",
+    name: "Aksesuarlar",
     href: "/products?category=accessories",
     subcategories: [
-      { name: "Bags", href: "/products?category=accessories&subcategory=bags" },
-      { name: "Socks", href: "/products?category=accessories&subcategory=socks" },
-      { name: "Gloves", href: "/products?category=accessories&subcategory=gloves" },
-      { name: "Hats", href: "/products?category=accessories&subcategory=hats" },
+      { name: "Sumkalar", href: "/products?category=accessories&subcategory=bags" },
+      { name: "Paypoqlar", href: "/products?category=accessories&subcategory=socks" },
+      { name: "Qo'lqoplar", href: "/products?category=accessories&subcategory=gloves" },
+      { name: "Bosh kiyimlar", href: "/products?category=accessories&subcategory=hats" },
     ],
   },
 ]
@@ -111,7 +111,7 @@ export function Header() {
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search products, brands, categories..."
+                placeholder="Qidirish..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}

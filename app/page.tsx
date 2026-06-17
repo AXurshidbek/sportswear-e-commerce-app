@@ -13,7 +13,7 @@ export default function HomePage() {
       <Header />
       <main>
         <HeroBanner />
-        <div className="max-w-7xl mx-auto px-4 py-4 md:py-6">
+        <div className="hidden max-w-7xl mx-auto px-4 py-4 md:py-6">
           <TranslationDemo />
         </div>
         <CategoryGrid />

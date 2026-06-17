@@ -10,7 +10,7 @@ export function FeaturedProducts() {
     <section className="py-8 md:py-12">
       <div className="container mx-auto px-4">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-bold tracking-tight md:text-2xl">Bestsellers</h2>
+          <h2 className="text-xl font-bold tracking-tight md:text-2xl">Eng ko'p sotilganlar</h2>
           <Link
             href="/products?tag=bestseller"
             className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"

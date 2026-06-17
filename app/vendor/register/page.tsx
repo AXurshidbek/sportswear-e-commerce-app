@@ -253,11 +253,10 @@ export default function VendorRegisterPage() {
                       key={category}
                       type="button"
                       onClick={() => toggleCategory(category)}
-                      className={`rounded-full px-4 py-2 text-sm font-medium capitalize transition-colors ${
-                        selectedCategories.includes(category)
-                          ? "bg-accent text-accent-foreground"
-                          : "bg-muted text-muted-foreground hover:bg-muted/80"
-                      }`}
+                      className={`rounded-full px-4 py-2 text-sm font-medium capitalize transition-colors ${selectedCategories.includes(category)
+                        ? "bg-accent text-accent-foreground"
+                        : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        }`}
                     >
                       {category}
                     </button>
